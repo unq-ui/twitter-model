@@ -110,7 +110,7 @@ class TwitterSystem {
 
     // Devuelve los post que tengan mas likes
     fun getTrendingTopics(): List<Tweet> {
-        return tweets.sortedBy { it.likes.size }.take(10).sortedBy { it.date }
+        return tweets.sortedByDescending { it.likes.size }.take(10).sortedBy { it.date }
     }
 
     // Devuelve el usuario o una excepcion si este no se encuentra

@@ -475,5 +475,45 @@ class TwitterSystemTest {
         }
     }
 
+    @Test
+    fun getTrendingTopics() {
+        val twitterSystem = TwitterSystem()
+        twitterSystem.addNewUser(DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage"))
+        twitterSystem.addNewUser(DraftUser("b", "b@gmail.com", "b", "image", "backgroundImage"))
+        twitterSystem.addNewUser(DraftUser("c", "c@gmail.com", "c", "image", "backgroundImage"))
+
+        val tweetDrafts = listOf(
+            DraftTweet("u_1", "content", "image"),
+            DraftTweet("u_1", "content1", "image"),
+            DraftTweet("u_1", "content2", "image"),
+            DraftTweet("u_1", "content3", "image"),
+            DraftTweet("u_1", "content4", "image"),
+            DraftTweet("u_1", "content5", "image"),
+            DraftTweet("u_1", "content6", "image"),
+            DraftTweet("u_1", "content7", "image"),
+            DraftTweet("u_1", "content8", "image"),
+            DraftTweet("u_1", "content9", "image"),
+            DraftTweet("u_1", "content10", "image"),
+        )
+
+        tweetDrafts.forEach { twitterSystem.addNewTweet(it) }
+
+        twitterSystem.tweets.take(3).forEach {
+            twitterSystem.addLike(it.id, "u_1")
+            twitterSystem.addLike(it.id, "u_2")
+            twitterSystem.addLike(it.id, "u_3")
+        }
+
+        twitterSystem.tweets.takeLast(5).forEach {
+            twitterSystem.addLike(it.id, "u_1")
+            twitterSystem.addLike(it.id, "u_3")
+        }
+
+        val trendingTopic = twitterSystem.getTrendingTopics()
+
+        assertEquals(trendingTopic.size, 10)
+        assertEquals(trendingTopic.map { it.id }, listOf("t_1", "t_2", "t_3", "t_4", "t_5", "t_7", "t_8", "t_9", "t_10", "t_11"))
+    }
+
 }
 
