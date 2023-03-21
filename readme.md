@@ -1,5 +1,8 @@
 # UNQ » UIs » Dominio » Twitter
 
+[![](https://jitpack.io/v/unq-ui/twitter-model.svg)](https://jitpack.io/#unq-ui/twitter-model)
+
+
 Construcción de Interfaces de Usuario, Universidad Nacional de Quilmes.
 
 ## TP 2023s1
@@ -21,9 +24,9 @@ Agregar la dependencia:
 
 ```xml
 <dependency>
-    <groupId>edu.unq</groupId>
-    <artifactId>twitter-modelo</artifactId>
-    <version>1.0.0</version>
+    <groupId>com.github.unq-ui</groupId>
+    <artifactId>twitter-model</artifactId>
+    <version>v1.0.0</version>
 </dependency>
 ```
 
