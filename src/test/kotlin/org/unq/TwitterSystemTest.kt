@@ -87,21 +87,21 @@ class TwitterSystemTest {
         twitterSystem.addNewUser(userDraft)
         twitterSystem.addNewUser(userDraft2)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val reTweetDraft = ReTweetDraft("u_2", "t_1", "content1", LocalDateTime.now())
+        val draftReTweet = DraftReTweet("u_2", "t_1", "content1", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
         val tweet = twitterSystem.tweets[0]
         assertEquals(tweet.reTweets.size, 0)
-        twitterSystem.addReTweet(reTweetDraft)
+        twitterSystem.addReTweet(draftReTweet)
         assertEquals(twitterSystem.tweets.size, 2)
         assertEquals(tweet.reTweets.size, 1)
 
         val reTweet = twitterSystem.tweets[1]
         assertEquals(reTweet.id, "t_2")
-        assertEquals(reTweet.content, reTweetDraft.content)
+        assertEquals(reTweet.content, draftReTweet.content)
         assertEquals(reTweet.user.id, "u_2")
-        assertEquals(reTweet.date, reTweetDraft.date)
+        assertEquals(reTweet.date, draftReTweet.date)
     }
 
     @Test
@@ -110,7 +110,7 @@ class TwitterSystemTest {
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val reTweetDraft = ReTweetDraft("u_1", "t_1", "content1", LocalDateTime.now())
+        val draftReTweet = DraftReTweet("u_1", "t_1", "content1", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
@@ -118,7 +118,7 @@ class TwitterSystemTest {
         assertEquals(tweet.reTweets.size, 0)
 
         assertFailsWith<TweetException>("Can not retweet your own tweet") {
-            twitterSystem.addReTweet(reTweetDraft)
+            twitterSystem.addReTweet(draftReTweet)
         }
         assertEquals(tweet.reTweets.size, 0)
     }
@@ -129,7 +129,7 @@ class TwitterSystemTest {
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val reTweetDraft = ReTweetDraft("u_2", "t_1", "content1", LocalDateTime.now())
+        val draftReTweet = DraftReTweet("u_2", "t_1", "content1", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
@@ -137,7 +137,7 @@ class TwitterSystemTest {
         assertEquals(tweet.reTweets.size, 0)
 
         assertFailsWith<UserException>("Not found user id") {
-            twitterSystem.addReTweet(reTweetDraft)
+            twitterSystem.addReTweet(draftReTweet)
         }
         assertEquals(tweet.reTweets.size, 0)
     }
@@ -149,12 +149,12 @@ class TwitterSystemTest {
         val userDraft2 = DraftUser("b", "b@gmail.com", "b", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         twitterSystem.addNewUser(userDraft2)
-        val reTweetDraft = ReTweetDraft("u_2", "t_1", "content1", LocalDateTime.now())
+        val draftReTweet = DraftReTweet("u_2", "t_1", "content1", LocalDateTime.now())
 
         assertEquals(twitterSystem.tweets.size, 0)
 
         assertFailsWith<TweetException>("Not found tweet id") {
-            twitterSystem.addReTweet(reTweetDraft)
+            twitterSystem.addReTweet(draftReTweet)
         }
     }
 
@@ -164,21 +164,21 @@ class TwitterSystemTest {
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val replyTweetDraft = ReplyTweetDraft("u_1", "t_1", "content1", "image2", LocalDateTime.now())
+        val draftReplyTweet = DraftReplyTweet("u_1", "t_1", "content1", "image2", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
         val tweet = twitterSystem.tweets[0]
         assertEquals(tweet.replies.size, 0)
-        twitterSystem.replyTweet(replyTweetDraft)
+        twitterSystem.replyTweet(draftReplyTweet)
         assertEquals(twitterSystem.tweets.size, 2)
         assertEquals(tweet.replies.size, 1)
 
         val reTweet = twitterSystem.tweets[1]
         assertEquals(reTweet.id, "t_2")
-        assertEquals(reTweet.content, replyTweetDraft.content)
+        assertEquals(reTweet.content, draftReplyTweet.content)
         assertEquals(reTweet.user.id, "u_1")
-        assertEquals(reTweet.date, replyTweetDraft.date)
+        assertEquals(reTweet.date, draftReplyTweet.date)
     }
 
     @Test
@@ -187,7 +187,7 @@ class TwitterSystemTest {
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val replyTweetDraft = ReplyTweetDraft("u_2", "t_1", "content1", "image2", LocalDateTime.now())
+        val draftReplyTweet = DraftReplyTweet("u_2", "t_1", "content1", "image2", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
@@ -195,7 +195,7 @@ class TwitterSystemTest {
         assertEquals(tweet.replies.size, 0)
 
         assertFailsWith<UserException>("Not found user id") {
-            twitterSystem.replyTweet(replyTweetDraft)
+            twitterSystem.replyTweet(draftReplyTweet)
         }
 
         assertEquals(twitterSystem.tweets.size, 1)
@@ -208,7 +208,7 @@ class TwitterSystemTest {
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
         val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
-        val replyTweetDraft = ReplyTweetDraft("u_1", "t_2", "content1", "image2", LocalDateTime.now())
+        val draftReplyTweet = DraftReplyTweet("u_1", "t_2", "content1", "image2", LocalDateTime.now())
 
         twitterSystem.addNewTweet(tweetDraft)
         assertEquals(twitterSystem.tweets.size, 1)
@@ -216,7 +216,7 @@ class TwitterSystemTest {
         assertEquals(tweet.replies.size, 0)
 
         assertFailsWith<TweetException>("Not found tweet id") {
-            twitterSystem.replyTweet(replyTweetDraft)
+            twitterSystem.replyTweet(draftReplyTweet)
         }
 
         assertEquals(twitterSystem.tweets.size, 1)

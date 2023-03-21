@@ -1041,7 +1041,7 @@ private fun addRetweets(twitterSystem: TwitterSystem) {
             .filter { it.user != user }
             .forEach {
                 twitterSystem.addReTweet(
-                    ReTweetDraft(user.id, it.id, getRandomElement(contents), getRandomDate(it.date))
+                    DraftReTweet(user.id, it.id, getRandomElement(contents), getRandomDate(it.date))
                 )
             }
     }
@@ -1052,7 +1052,7 @@ private fun addRepliesWithImage(twitterSystem: TwitterSystem) {
         getRandomList(twitterSystem.tweets, 5)
             .forEach {
                 twitterSystem.replyTweet(
-                    ReplyTweetDraft(user.id, it.id, getRandomElement(contents), getRandomElement(tweetImages), getRandomDate(it.date))
+                    DraftReplyTweet(user.id, it.id, getRandomElement(contents), getRandomElement(tweetImages), getRandomDate(it.date))
                 )
             }
     }
@@ -1063,7 +1063,7 @@ private fun addRepliesWithoutImage(twitterSystem: TwitterSystem) {
         getRandomList(twitterSystem.tweets, 5)
             .forEach {
                 twitterSystem.replyTweet(
-                    ReplyTweetDraft(user.id, it.id, getRandomElement(contents), null, getRandomDate(it.date))
+                    DraftReplyTweet(user.id, it.id, getRandomElement(contents), null, getRandomDate(it.date))
                 )
             }
     }

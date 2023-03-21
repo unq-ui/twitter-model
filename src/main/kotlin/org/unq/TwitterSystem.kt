@@ -5,7 +5,13 @@ class TwitterSystem {
     val users = mutableListOf<User>()
     val tweets = mutableListOf<Tweet>()
 
-    // Devuelve el usuario nuevo o excepción si el username o el email no estan disponibles.
+    /**
+     * Crea un usuario nuevo.
+     * @throws UserException
+     *   El email se encuentra repetido.
+     *   El username se encuentra repetido.
+     *
+     */
     fun addNewUser(user: DraftUser): User {
         users.forEach {
             if (it.username == user.username) throw UserException("Username is token")
@@ -16,7 +22,11 @@ class TwitterSystem {
         return newUser
     }
 
-    // Devuelve el tweet nuevo o una excepcion si el usuario no existe.
+    /**
+     * Crea un nuevo tweet.
+     * @throws UserException
+     *  si el userId del draftTweet no existe.
+     */
     fun addNewTweet(tweet: DraftTweet): Tweet {
         val user = getUser(tweet.userId)
         val newTweet = Tweet(
@@ -30,8 +40,16 @@ class TwitterSystem {
         return newTweet
     }
 
-    // Devuelve el tweet al que diste retweet o excepcion si el usuario o el tweet no existen
-    fun addReTweet(tweet: ReTweetDraft): Tweet {
+    /**
+     * Devuelve el tweet con el id de tweetId
+     *
+     * @throws UserException
+     *  si el userId del DraftReTweet no existe.
+     * @throws TweetException
+     *  si el tweetId no existe.
+     *  si el tweetId pertenece al mismo usuario.
+     */
+    fun addReTweet(tweet: DraftReTweet): Tweet {
         val user = getUser(tweet.userId)
         val originTweet = getTweet(tweet.tweetId)
         if (originTweet.user == user) throw TweetException("Can not retweet your own tweet")
@@ -47,8 +65,15 @@ class TwitterSystem {
         return originTweet
     }
 
-    // Devuelve el tweet al que diste retweet o excepcion si el usuario o el tweet no existen
-    fun replyTweet(tweet: ReplyTweetDraft): Tweet {
+    /**
+     * Devuelve el tweet con el id de tweetId
+     *
+     * @throws UserException
+     *  si el userId del DraftReplyTweet no existe.
+     * @throws TweetException
+     *  si el tweetId no existe.
+     */
+    fun replyTweet(tweet: DraftReplyTweet): Tweet {
         val user = getUser(tweet.userId)
         val originTweet = getTweet(tweet.tweetId)
         val newTweet = Tweet(
@@ -63,7 +88,14 @@ class TwitterSystem {
         return originTweet
     }
 
-    // Devuelve el tweet al que diste like o excepcion si el usuario o el tweet no existen
+    /**
+     * Devuelve el tweet con el id de tweetId
+     *
+     * @throws UserException
+     *  si el userId no existe.
+     * @throws TweetException
+     *  si el tweetId no existe.
+     */
     fun addLike(tweetId: String, userId: String): Tweet {
         val user = getUser(userId)
         val originTweet = getTweet(tweetId)
@@ -71,7 +103,12 @@ class TwitterSystem {
         return originTweet
     }
 
-    // Devuelve al primer usuario o excepcion si alguno de los dos usuarios no existen
+    /**
+     * Devuelve al usuario con el id userId
+     *
+     * @throws UserException
+     *  si el userId o el userToFollowingId no existe.
+     */
     fun toggleFollow(userId: String, userToFollowingId: String): User {
         val user = getUser(userId)
         val userToFollow = getUser(userToFollowingId)
@@ -89,18 +126,28 @@ class TwitterSystem {
         return user
     }
 
-    // Devuelve la lista de tweets que el contenido matche con el texto buscado.
+    /**
+     * Devuelve la lista de tweets donde el content contenga el `text`
+     */
     fun search(text: String): List<Tweet> {
         return tweets.filter { it.content.contains(text, true) }
     }
 
-    // Devuelve una lista de tweets de los usuarios que el userId sigue o una excepcion si este no existe.
+    /**
+     * Devuelve una lista de tweets de los usuarios que el userId sigue
+     * @throws UserException
+     *  si el userId no existe.
+     */
     fun getFollowingTweets(userId: String): List<Tweet> {
         val user = getUser(userId)
         return tweets.filter { user.following.contains(it.user) }.sortedBy { it.date }
     }
 
-    // Devuelve los usuarios con mas seguidores que no siga el usuario pasado o una excepcion si el usuario no existe
+    /**
+     * Devuelve los usuarios con mas seguidores que no siga el usuario con el userId
+     * @throws UserException
+     *  si el userId no existe.
+     */
     fun getUsersToFollow(userId: String): List<User> {
         val user = getUser(userId)
         val allUsers = users.sortedBy { it.followers.size }.toMutableList()
@@ -108,17 +155,27 @@ class TwitterSystem {
         return  allUsers.take(10)
     }
 
-    // Devuelve los post que tengan mas likes
+    /**
+     * Devuelve los post que tengan mas likes
+     */
     fun getTrendingTopics(): List<Tweet> {
         return tweets.sortedByDescending { it.likes.size }.take(10).sortedBy { it.date }
     }
 
-    // Devuelve el usuario o una excepcion si este no se encuentra
+    /**
+     * Devuelve el usuario con el userId
+     * @throws UserException
+     *  si el userId no existe.
+     */
     fun getUser(userId: String): User {
         return users.find { it.id == userId } ?: throw UserException("Not found user id")
     }
 
-    // Devuelve un tweet o una excepcion si este no se encuentra
+    /**
+     * Devuelve el tweet con el tweetId
+     * @throws TweetException
+     *  si el tweetId no existe.
+     */
     fun getTweet(tweetId: String): Tweet {
         return tweets.find { it.id == tweetId } ?: throw TweetException("Not found user id")
     }

@@ -17,13 +17,13 @@ class DraftTweet(
     val date: LocalDateTime = LocalDateTime.now()
 )
 
-class ReTweetDraft(
+class DraftReTweet(
     val userId: String,
     val tweetId: String,
     val content: String,
     val date: LocalDateTime = LocalDateTime.now()
 )
-class ReplyTweetDraft (
+class DraftReplyTweet (
     val userId: String,
     val tweetId: String,
     val content: String,
