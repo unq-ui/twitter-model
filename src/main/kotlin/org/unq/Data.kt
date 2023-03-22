@@ -1073,7 +1073,7 @@ private fun addLikes(twitterSystem: TwitterSystem) {
     twitterSystem.users.forEach { user ->
         getRandomList(twitterSystem.tweets, 30)
             .forEach {
-                twitterSystem.addLike(it.id, user.id)
+                twitterSystem.toggleLike(it.id, user.id)
             }
     }
 }

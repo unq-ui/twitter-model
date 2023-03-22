@@ -96,10 +96,14 @@ class TwitterSystem {
      * @throws TweetException
      *  si el tweetId no existe.
      */
-    fun addLike(tweetId: String, userId: String): Tweet {
+    fun toggleLike(tweetId: String, userId: String): Tweet {
         val user = getUser(userId)
         val originTweet = getTweet(tweetId)
-        originTweet.likes.add(user)
+        if (originTweet.likes.contains(user)) {
+            originTweet.likes.remove(user)
+        } else {
+            originTweet.likes.add(user)
+        }
         return originTweet
     }
 

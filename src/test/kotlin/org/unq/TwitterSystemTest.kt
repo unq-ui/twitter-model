@@ -224,7 +224,7 @@ class TwitterSystemTest {
     }
 
     @Test
-    fun addLikeTest() {
+    fun toggleLikeTest() {
         val twitterSystem = TwitterSystem()
         val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
         twitterSystem.addNewUser(userDraft)
@@ -233,9 +233,26 @@ class TwitterSystemTest {
 
         val tweet = twitterSystem.tweets[0]
         assertEquals(tweet.likes.size, 0)
-        twitterSystem.addLike("t_1", "u_1")
+        twitterSystem.toggleLike("t_1", "u_1")
         assertEquals(tweet.likes.size, 1)
         assertEquals(tweet.likes[0], twitterSystem.users[0])
+    }
+
+    @Test
+    fun toggleLikeTwoTimesTest() {
+        val twitterSystem = TwitterSystem()
+        val userDraft = DraftUser("a", "a@gmail.com", "a", "image", "backgroundImage")
+        twitterSystem.addNewUser(userDraft)
+        val tweetDraft = DraftTweet("u_1", "content", "image", LocalDateTime.now())
+        twitterSystem.addNewTweet(tweetDraft)
+
+        val tweet = twitterSystem.tweets[0]
+        assertEquals(tweet.likes.size, 0)
+        twitterSystem.toggleLike("t_1", "u_1")
+        assertEquals(tweet.likes.size, 1)
+        assertEquals(tweet.likes[0], twitterSystem.users[0])
+        twitterSystem.toggleLike("t_1", "u_1")
+        assertEquals(tweet.likes.size, 0)
     }
 
     @Test
@@ -249,7 +266,7 @@ class TwitterSystemTest {
         val tweet = twitterSystem.tweets[0]
         assertEquals(tweet.likes.size, 0)
         assertFailsWith<TweetException>("Not found tweet id") {
-            twitterSystem.addLike("t_2", "u_1")
+            twitterSystem.toggleLike("t_2", "u_1")
         }
         assertEquals(tweet.likes.size, 0)
     }
@@ -265,7 +282,7 @@ class TwitterSystemTest {
         val tweet = twitterSystem.tweets[0]
         assertEquals(tweet.likes.size, 0)
         assertFailsWith<UserException>("Not found user id") {
-            twitterSystem.addLike("t_1", "u_2")
+            twitterSystem.toggleLike("t_1", "u_2")
         }
         assertEquals(tweet.likes.size, 0)
     }
@@ -499,14 +516,14 @@ class TwitterSystemTest {
         tweetDrafts.forEach { twitterSystem.addNewTweet(it) }
 
         twitterSystem.tweets.take(3).forEach {
-            twitterSystem.addLike(it.id, "u_1")
-            twitterSystem.addLike(it.id, "u_2")
-            twitterSystem.addLike(it.id, "u_3")
+            twitterSystem.toggleLike(it.id, "u_1")
+            twitterSystem.toggleLike(it.id, "u_2")
+            twitterSystem.toggleLike(it.id, "u_3")
         }
 
         twitterSystem.tweets.takeLast(5).forEach {
-            twitterSystem.addLike(it.id, "u_1")
-            twitterSystem.addLike(it.id, "u_3")
+            twitterSystem.toggleLike(it.id, "u_1")
+            twitterSystem.toggleLike(it.id, "u_3")
         }
 
         val trendingTopic = twitterSystem.getTrendingTopics()
